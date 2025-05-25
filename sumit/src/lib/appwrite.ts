@@ -15,27 +15,14 @@ export interface VehicleDetails {
     id: string;
     vehicleId: number;
     vehicleName: string;
-    vehicleNumber: string;
-    description: string;
-    specifications: {
-        engine?: string;
-        transmission?: string;
-        fuelType?: string;
-        seatingCapacity?: number;
-        mileage?: string;
-    };
-    features: string[];
+    price: number;
     youtubeUrl: string;
 }
 
-export const vehicleService = {
-    async createVehicleDetails(
+export const vehicleService = {    async createVehicleDetails(
         vehicleId: number, 
         vehicleName: string,
-        vehicleNumber: string,
-        description: string,
-        specifications: VehicleDetails['specifications'],
-        features: string[],
+        price: number,
         youtubeUrl: string
     ): Promise<VehicleDetails> {
         try {
@@ -46,10 +33,7 @@ export const vehicleService = {
                 {
                     vehicleId,
                     vehicleName,
-                    vehicleNumber,
-                    description,
-                    specifications,
-                    features,
+                    price,
                     youtubeUrl,
                 }
             );
@@ -76,11 +60,9 @@ export const vehicleService = {
             console.error('Error fetching vehicle details:', error);
             throw error;
         }
-    },
-
-    async updateVehicleDetails(
+    },    async updateVehicleDetails(
         id: string,
-        updates: Partial<Omit<VehicleDetails, 'id' | 'vehicleId'>>
+        updates: Partial<{ vehicleName: string; price: number; youtubeUrl: string; }>
     ): Promise<VehicleDetails> {
         try {
             const response = await databases.updateDocument(
