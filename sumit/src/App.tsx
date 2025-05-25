@@ -321,14 +321,12 @@ function AppContent() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">                    <div>
                       <label htmlFor="imageUrl" className="block text-sm font-medium mb-1">Image URL</label>
                       <input
                         id="imageUrl"
                         type="url"
-                        required
-                        value={newVehicle.imageUrl}
+                        value={newVehicle.imageUrl || ''}
                         onChange={(e) => setNewVehicle({ ...newVehicle, imageUrl: e.target.value })}
                         className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                       />
@@ -474,29 +472,46 @@ function AppContent() {
         {/* Vehicle Details Modal */}
         {selectedVehicle && !showBooking && (
           <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-            <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto`}>
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">              <h3 className="text-xl font-semibold">{selectedVehicle.name}</h3>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => {
-                    setEditingVehicle(selectedVehicle);
-                    setNewVehicle(selectedVehicle);
-                    setSelectedVehicle(null);
-                    setShowAddVehicle(true);
-                  }}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                >
-                  Edit
-                </button>
-                <button 
-                  onClick={() => setSelectedVehicle(null)}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  aria-label="Close modal"
-                >
-                  <X className="h-6 w-6" />
-                </button>
+            <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto`}>              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <h3 className="text-xl font-semibold">{selectedVehicle.name}</h3>
+                <div className="flex items-center space-x-2">
+                  {isAuthenticated && (
+                    <>
+                      <button
+                        onClick={() => {
+                          setEditingVehicle(selectedVehicle);
+                          setNewVehicle(selectedVehicle);
+                          setSelectedVehicle(null);
+                          setShowAddVehicle(true);
+                        }}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (window.confirm('Are you sure you want to delete this vehicle? This action cannot be undone.')) {
+                            deleteVehicle(selectedVehicle.id);
+                            setSelectedVehicle(null);
+                            const updatedData = getVehicles();
+                            setVehicles(updatedData.vehicles);
+                          }
+                        }}
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
+                  <button 
+                    onClick={() => setSelectedVehicle(null)}
+                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    aria-label="Close modal"
+                  >
+                    <X className="h-6 w-6" />
+                  </button>
+                </div>
               </div>
-            </div>
               
               <div className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

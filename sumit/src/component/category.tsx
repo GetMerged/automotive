@@ -3,7 +3,7 @@ export type Vehicle = {
     name: string;
     price: number;
     isNew: boolean;
-    imageUrl: string;
+    imageUrl?: string;
     youtubeUrl?: string;
     seller: {
       name: string;
