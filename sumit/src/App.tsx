@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Car, Menu, X, Calendar, Phone, Mail, MapPin, Plus, Youtube, LogIn, LogOut } from 'lucide-react';
-import { getVehicles, Vehicle, VehicleCollection, addVehicle, updateVehicle } from './component/category';
+import { getVehicles, Vehicle, VehicleCollection, addVehicle, updateVehicle, deleteVehicle } from './component/category';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoginModal } from './components/LoginModal';
 
