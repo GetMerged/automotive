@@ -4,6 +4,20 @@ import { getVehicles, Vehicle, VehicleCollection, addVehicle, updateVehicle, del
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoginModal } from './components/LoginModal';
 
+const formatYouTubeUrl = (url: string): string => {
+  if (!url) return '';
+  
+  // Handle different YouTube URL formats
+  const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+  const match = url.match(regExp);
+  const videoId = match && match[7].length === 11 ? match[7] : null;
+  
+  if (!videoId) return '';
+  
+  // Return secure embed URL with additional parameters for better security and performance
+  return `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&enablejsapi=1`;
+};
+
 function AppContent() {
   const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -537,11 +551,12 @@ function AppContent() {
                       <h4 className="font-semibold text-lg mb-2">Video Preview</h4>
                       <div className="relative pt-[56.25%] bg-gray-200 rounded-lg overflow-hidden">
                         <iframe
-                          src={selectedVehicle.youtubeUrl.replace('watch?v=', 'embed/')}
+                          src={formatYouTubeUrl(selectedVehicle.youtubeUrl)}
                           title={`${selectedVehicle.name} video`}
                           className="absolute inset-0 w-full h-full"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
+                          sandbox="allow-same-origin allow-scripts allow-presentation"
                         ></iframe>
                       </div>
                     </div>
