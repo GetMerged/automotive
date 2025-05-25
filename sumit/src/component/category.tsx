@@ -10,15 +10,9 @@ export const categories = {
   export const vehicles = {
     cars: [
       { 
-        id: 1, 
-        name: 'Toyota Camry',
+        id: 1,        name: 'Toyota Camry',
         category: 'midrange',
         price: 35000,
-        images: [
-          'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb',
-          'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fc',
-          'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fd'
-        ],
         isNew: true,
         video: 'https://www.youtube.com/embed/dXxKNyYZVuU',
         seller: {
@@ -32,15 +26,9 @@ export const categories = {
         details: "The Toyota Camry is a reliable mid-size sedan featuring excellent fuel efficiency, comfortable interior, and advanced safety features. This model includes the latest entertainment system and driver assistance package."
       },
       { 
-        id: 2, 
-        name: 'Honda City',
+        id: 2,        name: 'Honda City',
         category: 'midrange',
         price: 25000,
-        images: [
-          'https://images.unsplash.com/photo-1609917141461-11dee4f47f76',
-          'https://images.unsplash.com/photo-1609917141461-11dee4f47f77',
-          'https://images.unsplash.com/photo-1609917141461-11dee4f47f78'
-        ],
         isNew: false,
         video: 'https://www.youtube.com/embed/7d3Zvd6jIws',
         seller: {
@@ -54,15 +42,9 @@ export const categories = {
         details: "The Honda City combines efficiency with comfort, featuring a responsive engine, spacious interior, and modern amenities. This model includes cruise control and premium audio system."
       },
       {
-        id: 3,
-        name: 'Bajaj RE Auto',
+        id: 3,        name: 'Bajaj RE Auto',
         category: 'auto',
         price: 5000,
-        images: [
-          'https://images.unsplash.com/photo-1623345805743-61bc90fa86da',
-          'https://images.unsplash.com/photo-1623345805743-61bc90fa86db',
-          'https://images.unsplash.com/photo-1623345805743-61bc90fa86dc'
-        ],
         isNew: true,
         video: 'https://www.youtube.com/embed/Y2XUxaZEb8E',
         seller: {
@@ -78,15 +60,9 @@ export const categories = {
     ],
     bikes: [
       { 
-        id: 4, 
-        name: 'Royal Enfield Classic 350',
+        id: 4,        name: 'Royal Enfield Classic 350',
         category: 'cruiser',
         price: 4500,
-        images: [
-          'https://images.unsplash.com/photo-1591637333184-19aa84b3e01f',
-          'https://images.unsplash.com/photo-1591637333184-19aa84b3e01e',
-          'https://images.unsplash.com/photo-1591637333184-19aa84b3e01d'
-        ],
         isNew: true,
         video: 'https://www.youtube.com/embed/ujwZRNLxCXs',
         seller: {
@@ -100,15 +76,9 @@ export const categories = {
         details: "The Royal Enfield Classic 350 offers a perfect blend of vintage styling and modern reliability. Features include fuel injection, disc brakes, and classic British styling."
       },
       { 
-        id: 5, 
-        name: 'Honda CBR 250R',
+        id: 5,        name: 'Honda CBR 250R',
         category: 'sport_bikes',
         price: 4000,
-        images: [
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87',
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a88',
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a89'
-        ],
         isNew: false,
         video: 'https://www.youtube.com/embed/PIyVU2gFtpY',
         seller: {
@@ -122,15 +92,9 @@ export const categories = {
         details: "The Honda CBR 250R is a perfect entry-level sports bike with reliable performance and comfortable ergonomics. Includes ABS and digital instrumentation."
       },
       { 
-        id: 6, 
-        name: 'Hero Splendor Plus',
+        id: 6,        name: 'Hero Splendor Plus',
         category: 'commuter',
         price: 1200,
-        images: [
-          'https://images.unsplash.com/photo-1599819811279-d5ad9cccf838',
-          'https://images.unsplash.com/photo-1599819811279-d5ad9cccf839',
-          'https://images.unsplash.com/photo-1599819811279-d5ad9cccf840'
-        ],
         isNew: true,
         video: 'https://www.youtube.com/embed/3R3J1FpjWcE',
         seller: {

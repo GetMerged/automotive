@@ -7,7 +7,6 @@ type Vehicle = {
   name: string;
   category: string;
   price: number;
-  images: string[];
   isNew: boolean;
   video: string;
   seller: {
@@ -166,56 +165,56 @@ function App() {
 
         {/* Vehicle Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {Object.entries(vehicles).map(([_type, items]) => 
-            items.map(vehicle => {
-              if (
-                activeCategory === 'all' || 
-                activeCategory === vehicle.category ||
-                (activeCategory === 'new' && vehicle.isNew)
-              ) {
-                return (
-                  <div 
-                    key={vehicle.id} 
-                    className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-lg overflow-hidden`}
-                  >
-                    <div className="relative h-48">
-                      <img
-                        src={vehicle.images[0]}
-                        alt={vehicle.name}
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                      {vehicle.isNew && (
-                        <span className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm z-10">
-                          New Arrival
-                        </span>
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-semibold mb-2">{vehicle.name}</h3>
-                      <div className="flex items-center justify-between mb-4">
-                        <div>
-                          <p className="text-gray-500 dark:text-gray-400 line-through">
-                            ${vehicle.price.toLocaleString()}
-                          </p>
-                          <p className="text-2xl font-bold text-green-600">
-                            ${calculateDiscountedPrice(vehicle.price)}
-                          </p>
-                        </div>
-                        <button 
-                          onClick={() => openInspectionModal(vehicle)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
-                        >
-                          <Play className="h-5 w-5" />
-                          <span>Video Tour</span>
-                        </button>
+          {Object.values(vehicles).flat().map(vehicle => {
+            if (
+              activeCategory === 'all' || 
+              activeCategory === vehicle.category ||
+              (activeCategory === 'new' && vehicle.isNew)
+            ) {
+              return (
+                <div 
+                  key={vehicle.id} 
+                  className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-lg overflow-hidden`}
+                >
+                  <div className="relative pt-[56.25%]">
+                    <iframe
+                      className="absolute inset-0 w-full h-full"
+                      src={vehicle.video}
+                      title={`${vehicle.name} video tour`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                    {vehicle.isNew && (
+                      <span className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm z-10">
+                        New Arrival
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-2">{vehicle.name}</h3>
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400 line-through">
+                          ${vehicle.price.toLocaleString()}
+                        </p>
+                        <p className="text-2xl font-bold text-green-600">
+                          ${calculateDiscountedPrice(vehicle.price)}
+                        </p>
                       </div>
+                      <button 
+                        onClick={() => openInspectionModal(vehicle)}
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
+                      >
+                        <Play className="h-5 w-5" />
+                        <span>View Details</span>
+                      </button>
                     </div>
                   </div>
-                );
-              }
-              return null;
-            })
-          )}
+                </div>
+              );
+            }
+            return null;
+          })}
         </div>
       </main>
 
