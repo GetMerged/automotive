@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Car, Bike, Play, Menu, X, User, Calendar, Phone, Mail, MapPin } from 'lucide-react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Parallax, Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/parallax';
+import React, { useState } from 'react';
+import { Sun, Moon, Car, Play, Menu, X, Calendar, Phone, Mail, MapPin } from 'lucide-react';
 import { categories, vehicles } from './component/category';
 
 type Vehicle = {
@@ -106,10 +101,18 @@ function App() {
                 <Phone className="h-5 w-5" />
                 <span>Contact Seller</span>
               </button>
-              <button onClick={toggleDarkMode} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+              <button 
+                onClick={toggleDarkMode} 
+                className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+                aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              >
                 {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </button>
-              <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              <button 
+                className="md:hidden" 
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Toggle menu"
+              >
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
             </div>
@@ -163,7 +166,7 @@ function App() {
 
         {/* Vehicle Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {Object.entries(vehicles).map(([type, items]) => 
+          {Object.entries(vehicles).map(([_type, items]) => 
             items.map(vehicle => {
               if (
                 activeCategory === 'all' || 
@@ -176,28 +179,11 @@ function App() {
                     className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-lg overflow-hidden`}
                   >
                     <div className="relative h-48">
-                      <Swiper
-                        modules={[Autoplay, Parallax, Navigation]}
-                        parallax={true}
-                        navigation={true}
-                        autoplay={{
-                          delay: 3000,
-                          disableOnInteraction: false,
-                        }}
-                        className="h-full"
-                      >
-                        {vehicle.images.map((image, index) => (
-                          <SwiperSlide key={index}>
-                            <div
-                              className="absolute inset-0 bg-center bg-cover"
-                              style={{
-                                backgroundImage: `url(${image})`,
-                              }}
-                              data-swiper-parallax="-300"
-                            />
-                          </SwiperSlide>
-                        ))}
-                      </Swiper>
+                      <img
+                        src={vehicle.images[0]}
+                        alt={vehicle.name}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
                       {vehicle.isNew && (
                         <span className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm z-10">
                           New Arrival
@@ -242,6 +228,7 @@ function App() {
               <button 
                 onClick={() => setSelectedVehicle(null)}
                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                aria-label="Close modal"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -250,6 +237,7 @@ function App() {
               <iframe
                 className="absolute inset-0 w-full h-full"
                 src={selectedVehicle.video}
+                title={`${selectedVehicle.name} video tour`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
@@ -278,6 +266,7 @@ function App() {
               <button 
                 onClick={() => setShowContactInfo(false)}
                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                aria-label="Close modal"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -317,6 +306,7 @@ function App() {
               <button 
                 onClick={() => {setSelectedVehicle(null); setShowBooking(false)}}
                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                aria-label="Close modal"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -326,8 +316,9 @@ function App() {
               <form onSubmit={handleBooking} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Date</label>
+                    <label htmlFor="date" className="block text-sm font-medium mb-1">Date</label>
                     <input
+                      id="date"
                       type="date"
                       required
                       value={bookingDate}
@@ -336,8 +327,9 @@ function App() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Time</label>
+                    <label htmlFor="time" className="block text-sm font-medium mb-1">Time</label>
                     <input
+                      id="time"
                       type="time"
                       required
                       value={bookingTime}
@@ -346,8 +338,9 @@ function App() {
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium mb-1">Your Name</label>
+                    <label htmlFor="name" className="block text-sm font-medium mb-1">Your Name</label>
                     <input
+                      id="name"
                       type="text"
                       required
                       value={bookingName}
@@ -356,8 +349,9 @@ function App() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Email</label>
+                    <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
                     <input
+                      id="email"
                       type="email"
                       required
                       value={bookingEmail}
@@ -366,8 +360,9 @@ function App() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Phone</label>
+                    <label htmlFor="phone" className="block text-sm font-medium mb-1">Phone</label>
                     <input
+                      id="phone"
                       type="tel"
                       required
                       value={bookingPhone}
