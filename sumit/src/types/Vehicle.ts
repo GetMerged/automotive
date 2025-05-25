@@ -10,7 +10,7 @@ interface VehicleSeller {
 export interface Vehicle {
   id: number;
   name: string;
-  price: number;
+  price: string;
   isNew: boolean;
   imageUrl: string | undefined;
   youtubeUrl: string | undefined;

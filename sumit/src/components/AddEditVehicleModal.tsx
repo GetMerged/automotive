@@ -64,7 +64,7 @@ const AddEditVehicleModal = ({
                 <label htmlFor="price" className="block text-sm font-medium mb-1">Price</label>
                 <input
                   id="price"
-                  type="number"
+                  type="string"
                   required
                   value={newVehicle.price}
                   onChange={(e) => setNewVehicle({ ...newVehicle, price: Number(e.target.value) })}
