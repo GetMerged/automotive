@@ -104,11 +104,10 @@ const VehicleDetailsModal = ({
               )}
               <div className="mt-4">
                 <h4 className="font-semibold text-lg mb-2">Pricing</h4>
-                <p className="text-gray-500 dark:text-gray-400 line-through">
-                  Original Price: ${selectedVehicle.price.toLocaleString()}
+                <p className="text-gray-500 dark:text-gray-400 line-through">                  Original Price: ₹{selectedVehicle.price.toLocaleString('en-IN')}
                 </p>
                 <p className="text-2xl font-bold text-green-600">
-                  Special Offer: ${calculateDiscountedPrice(selectedVehicle.price)}
+                  Special Offer: ₹{calculateDiscountedPrice(selectedVehicle.price).toLocaleString('en-IN')}
                 </p>
               </div>
 

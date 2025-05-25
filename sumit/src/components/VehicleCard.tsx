@@ -58,13 +58,12 @@ const VehicleCard = ({ vehicle, darkMode, onViewDetails }: VehicleCardProps) => 
       <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">{vehicle.name}</h3>
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <p className="text-gray-500 dark:text-gray-400 line-through">
-              ${vehicle.price.toLocaleString()}
-            </p>
-            <p className="text-2xl font-bold text-green-600">
-              ${calculateDiscountedPrice(vehicle.price)}
-            </p>
+          <div>              <p className="text-gray-500 dark:text-gray-400 line-through">
+                ₹{vehicle.price.toLocaleString('en-IN')}
+              </p>
+              <p className="text-2xl font-bold text-green-600">
+                ₹{calculateDiscountedPrice(vehicle.price).toLocaleString('en-IN')}
+              </p>
           </div>
           <button 
             onClick={() => onViewDetails(vehicle)}
