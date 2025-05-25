@@ -251,9 +251,17 @@ function AppContent() {
             <div 
               key={vehicle.id} 
               className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-lg overflow-hidden`}
-            >
-              <div className="relative pt-[56.25%] bg-gray-200">
-                {vehicle.imageUrl && (
+            >              <div className="relative pt-[56.25%] bg-gray-200">
+                {vehicle.youtubeUrl ? (
+                  <iframe
+                    src={formatYouTubeUrl(vehicle.youtubeUrl)}
+                    title={`${vehicle.name} video`}
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    sandbox="allow-same-origin allow-scripts allow-presentation"
+                  ></iframe>
+                ) : vehicle.imageUrl && (
                   <img
                     src={vehicle.imageUrl}
                     alt={vehicle.name}
@@ -264,6 +272,12 @@ function AppContent() {
                   <span className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">
                     New Arrival
                   </span>
+                )}
+                {vehicle.youtubeUrl && (
+                  <div className="absolute bottom-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-sm flex items-center">
+                    <Youtube className="h-4 w-4 mr-1" />
+                    Watch Video
+                  </div>
                 )}
               </div>
               <div className="p-6">
