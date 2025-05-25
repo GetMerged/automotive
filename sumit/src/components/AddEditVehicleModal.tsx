@@ -11,7 +11,7 @@ interface AddEditVehicleModalProps {
   setShowAddVehicle: Dispatch<SetStateAction<boolean>>;
   setEditingVehicle: Dispatch<SetStateAction<Vehicle | null>>;
   setNewVehicle: Dispatch<SetStateAction<Vehicle>>;
-  handleAddEditVehicle: (e: React.FormEvent) => void;
+  handleAddEditVehicle: (e: React.FormEvent) => Promise<void>;
 }
 
 const AddEditVehicleModal = ({
@@ -26,6 +26,11 @@ const AddEditVehicleModal = ({
   handleAddEditVehicle
 }: AddEditVehicleModalProps) => {
   if (!showAddVehicle) return null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleAddEditVehicle(e);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
@@ -46,7 +51,7 @@ const AddEditVehicleModal = ({
         </div>
         
         <div className="p-6">
-          <form onSubmit={handleAddEditVehicle} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Vehicle Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
