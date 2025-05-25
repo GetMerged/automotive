@@ -11,14 +11,10 @@ export interface Vehicle {
   id: number;
   name: string;
   price: string;
-  isNew: boolean;
-  imageUrl: string | undefined;
   youtubeUrl: string | undefined;
   details: string;
-  seller: VehicleSeller;
-  specifications?: {
-    [key: string]: string;
-  };
+  
+  
 }
 
 export interface VehicleCollection {
