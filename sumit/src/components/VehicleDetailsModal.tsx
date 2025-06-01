@@ -3,17 +3,17 @@ import { X, Calendar } from 'lucide-react';
 
 interface VehicleDetailsModalProps {
   darkMode: boolean;
-  selectedVehicle: Vehicle;
+  selectedVehicle: Vehicle | null;
   showBooking: boolean;
   isAuthenticated: boolean;
   setEditingVehicle: (vehicle: Vehicle | null) => void;
-  setNewVehicle: (vehicle: Vehicle) => void;
+  setNewVehicle: (vehicle: Omit<Vehicle, 'id'>) => void;
   setSelectedVehicle: (vehicle: Vehicle | null) => void;
   setShowBooking: (show: boolean) => void;
   setShowAddVehicle: (show: boolean) => void;
   deleteVehicle: (id: number) => void;
-  setVehicles: (vehicles: Vehicle[]) => void;
-  getVehicles: () => { vehicles: Vehicle[] };
+  setVehicles?: (vehicles: Vehicle[]) => void;
+  getVehicles?: () => Promise<Vehicle[]> | Vehicle[];
 }
 
 const VehicleDetailsModal = ({
@@ -68,12 +68,22 @@ const VehicleDetailsModal = ({
                   Edit
                 </button>
                 <button
-                  onClick={() => {
+                  onClick={async () => {
+                    if (!selectedVehicle) return;
+                    
                     if (window.confirm('Are you sure you want to delete this vehicle? This action cannot be undone.')) {
-                      deleteVehicle(selectedVehicle.id);
-                      setSelectedVehicle(null);
-                      const updatedData = getVehicles();
-                      setVehicles(updatedData.vehicles);
+                      try {
+                        await deleteVehicle(selectedVehicle.id);
+                        setSelectedVehicle(null);
+                        
+                        if (getVehicles && setVehicles) {
+                          const updatedVehicles = await getVehicles();
+                          setVehicles(Array.isArray(updatedVehicles) ? updatedVehicles : []);
+                        }
+                      } catch (error) {
+                        console.error('Error deleting vehicle:', error);
+                        alert('Failed to delete vehicle. Please try again.');
+                      }
                     }
                   }}
                   className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"

@@ -1,4 +1,4 @@
-interface VehicleSeller {
+export interface Seller {
   name: string;
   experience: string;
   phone: string;
@@ -10,13 +10,17 @@ interface VehicleSeller {
 export interface Vehicle {
   id: number;
   name: string;
-  price: string;
-  youtubeUrl: string | undefined;
+  price: number;
+  isNew: boolean;
+  imageUrl?: string;
+  youtubeUrl?: string;
   details: string;
-  
-  
+  seller: Seller;
+  specifications?: {
+    [key: string]: string;
+  };
 }
 
-export interface VehicleCollection {
+export type VehicleCollection = {
   vehicles: Vehicle[];
-}
+};

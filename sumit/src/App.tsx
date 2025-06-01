@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getVehicles, Vehicle, addVehicle, updateVehicle, deleteVehicle } from './components/category';
+import { getVehicles, addVehicle, updateVehicle, deleteVehicle } from './components/category';
+import { Vehicle, Seller } from './types/Vehicle';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoginModal } from './components/LoginModal';
 import Header from './components/Header';
@@ -22,6 +23,8 @@ function AppContent() {
   const [bookingPhone, setBookingPhone] = useState('');
   const [showContactInfo, setShowContactInfo] = useState(false);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showNewOnly, setShowNewOnly] = useState(false);
   const [showAddVehicle, setShowAddVehicle] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
@@ -29,29 +32,52 @@ function AppContent() {
   
   const { isAuthenticated, logout } = useAuth();
 
-  const emptyVehicle: Vehicle = {
-    id: Date.now(),
+  const emptySeller: Seller = {
+    name: '',
+    experience: '',
+    phone: '',
+    email: '',
+    location: '',
+    description: ''
+  };
+
+  const emptyVehicle: Omit<Vehicle, 'id'> = {
     name: '',
     price: 0,
     isNew: true,
     imageUrl: '',
     youtubeUrl: '',
     details: '',
-    seller: {
-      name: '',
-      experience: '',
-      phone: '',
-      email: '',
-      location: '',
-      description: ''
-    }
+    seller: { ...emptySeller }
   };
   
-  const [newVehicle, setNewVehicle] = useState<Vehicle>(emptyVehicle);
+  const [newVehicle, setNewVehicle] = useState<Omit<Vehicle, 'id'>>(emptyVehicle);
+  
+  // Create a function to convert from Omit<Vehicle, 'id'> to Vehicle
+  const createVehicle = (vehicle: Omit<Vehicle, 'id'>, id: number = Date.now()): Vehicle => ({
+    ...vehicle,
+    id,
+    seller: { ...vehicle.seller }
+  });
+
+  const fetchVehicles = async () => {
+    try {
+      setLoading(true);
+      const data = await getVehicles();
+      // Ensure we always set an array of vehicles
+      setVehicles(Array.isArray(data) ? data : []);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching vehicles:', err);
+      setError('Failed to load vehicles. Please try again.');
+      setVehicles([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const data = getVehicles();
-    setVehicles(data.vehicles);
+    fetchVehicles();
   }, []);
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
@@ -68,24 +94,46 @@ function AppContent() {
     setBookingPhone('');
   };
 
-  const handleAddEditVehicle = (e: React.FormEvent) => {
+  const handleAddEditVehicle = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingVehicle) {
-      updateVehicle({...newVehicle, id: editingVehicle.id});
-      setEditingVehicle(null);
-    } else {
-      addVehicle(newVehicle);
+    try {
+      if (editingVehicle) {
+        const updatedVehicle = createVehicle(newVehicle, editingVehicle.id);
+        await updateVehicle(updatedVehicle);
+        setEditingVehicle(null);
+      } else {
+        const newVehicleWithId = createVehicle(newVehicle);
+        await addVehicle(newVehicleWithId);
+      }
+      
+      await fetchVehicles();
+      setShowAddVehicle(false);
+      setNewVehicle(emptyVehicle);
+    } catch (err) {
+      console.error('Error saving vehicle:', err);
+      setError('Failed to save vehicle. Please try again.');
     }
-    
-    const updatedData = getVehicles();
-    setVehicles(updatedData.vehicles);
-    setShowAddVehicle(false);
-    setNewVehicle(emptyVehicle);
   };
 
   const filteredVehicles = showNewOnly 
     ? vehicles.filter(v => v.isNew)
     : vehicles;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl">Loading vehicles...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-red-500 text-xl">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
