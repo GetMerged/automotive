@@ -32,32 +32,25 @@ function AppContent() {
   
   const { isAuthenticated, logout } = useAuth();
 
-  const emptySeller: Seller = {
-    name: '',
-    experience: '',
-    phone: '',
-    email: '',
-    location: '',
-    description: ''
-  };
-
   const emptyVehicle: Omit<Vehicle, 'id'> = {
     name: '',
-    price: 0,
-    isNew: true,
-    imageUrl: '',
+    price: '',
     youtubeUrl: '',
     details: '',
-    seller: { ...emptySeller }
+    vehicleId: 0
   };
   
   const [newVehicle, setNewVehicle] = useState<Omit<Vehicle, 'id'>>(emptyVehicle);
   
   // Create a function to convert from Omit<Vehicle, 'id'> to Vehicle
-  const createVehicle = (vehicle: Omit<Vehicle, 'id'>, id: number = Date.now()): Vehicle => ({
+  const createVehicle = (vehicle: Omit<Vehicle, 'id'>, id: string = Date.now().toString()): Vehicle => ({
     ...vehicle,
-    id,
-    seller: { ...vehicle.seller }
+    id: id.toString(),
+    name: vehicle.name || '', // Ensure name is always a string
+    price: vehicle.price || '',
+    youtubeUrl: vehicle.youtubeUrl || '',
+    details: vehicle.details || '',
+    vehicleId: vehicle.vehicleId || 0
   });
 
   const fetchVehicles = async () => {
@@ -115,9 +108,8 @@ function AppContent() {
     }
   };
 
-  const filteredVehicles = showNewOnly 
-    ? vehicles.filter(v => v.isNew)
-    : vehicles;
+  // All vehicles are shown since we've removed the isNew filter
+  const filteredVehicles = vehicles;
 
   if (loading) {
     return (
@@ -186,20 +178,22 @@ function AppContent() {
           handleAddEditVehicle={handleAddEditVehicle}
         />
 
-        <VehicleDetailsModal
-          darkMode={darkMode}
-          selectedVehicle={selectedVehicle!}
-          showBooking={showBooking}
-          isAuthenticated={isAuthenticated}
-          setEditingVehicle={setEditingVehicle}
-          setNewVehicle={setNewVehicle}
-          setSelectedVehicle={setSelectedVehicle}
-          setShowBooking={setShowBooking}
-          setShowAddVehicle={setShowAddVehicle}
-          deleteVehicle={deleteVehicle}
-          setVehicles={setVehicles}
-          getVehicles={getVehicles}
-        />
+        {selectedVehicle && (
+          <VehicleDetailsModal
+            darkMode={darkMode}
+            selectedVehicle={selectedVehicle}
+            showBooking={showBooking}
+            isAuthenticated={isAuthenticated}
+            setEditingVehicle={setEditingVehicle}
+            setNewVehicle={setNewVehicle}
+            setSelectedVehicle={setSelectedVehicle}
+            setShowBooking={setShowBooking}
+            setShowAddVehicle={setShowAddVehicle}
+            deleteVehicle={deleteVehicle}
+            setVehicles={setVehicles}
+            getVehicles={getVehicles}
+          />
+        )}
 
         <BookingModal
           darkMode={darkMode}

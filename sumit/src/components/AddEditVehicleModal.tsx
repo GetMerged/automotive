@@ -6,11 +6,11 @@ interface AddEditVehicleModalProps {
   darkMode: boolean;
   showAddVehicle: boolean;
   editingVehicle: Vehicle | null;
-  newVehicle: Vehicle;
-  emptyVehicle: Vehicle;
+  newVehicle: Omit<Vehicle, 'id'> & { id?: string };
+  emptyVehicle: Omit<Vehicle, 'id'>;
   setShowAddVehicle: Dispatch<SetStateAction<boolean>>;
   setEditingVehicle: Dispatch<SetStateAction<Vehicle | null>>;
-  setNewVehicle: Dispatch<SetStateAction<Vehicle>>;
+  setNewVehicle: Dispatch<SetStateAction<Omit<Vehicle, 'id'> & { id?: string }>>;
   handleAddEditVehicle: (e: React.FormEvent) => Promise<void>;
 }
 
@@ -52,59 +52,73 @@ const AddEditVehicleModal = ({
         
         <div className="p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Vehicle ID */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="id" className="block text-sm font-medium mb-1">ID (Auto-generated)</label>
+                <input
+                  id="id"
+                  type="text"
+                  value={newVehicle.id || ''}
+                  readOnly
+                  className="w-full px-3 py-2 border rounded-lg bg-gray-100 dark:bg-gray-600 cursor-not-allowed"
+                />
+              </div>
+              <div>
+                <label htmlFor="vehicleId" className="block text-sm font-medium mb-1">Vehicle ID</label>
+                <input
+                  id="vehicleId"
+                  type="number"
+                  value={newVehicle.vehicleId || ''}
+                  onChange={(e) => setNewVehicle({ ...newVehicle, vehicleId: Number(e.target.value) })}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                />
+              </div>
+            </div>
+
             {/* Vehicle Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-1">Vehicle Name</label>
+                <label htmlFor="name" className="block text-sm font-medium mb-1">Vehicle Name *</label>
                 <input
                   id="name"
                   type="text"
                   required
-                  value={newVehicle.name}
+                  value={newVehicle.name || ''}
                   onChange={(e) => setNewVehicle({ ...newVehicle, name: e.target.value })}
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                 />
               </div>
               <div>
-                <label htmlFor="price" className="block text-sm font-medium mb-1">Price</label>
+                <label htmlFor="price" className="block text-sm font-medium mb-1">Price *</label>
                 <input
                   id="price"
-                  type="number"
+                  type="text"
                   required
-                  value={newVehicle.price}
-                  onChange={(e) => setNewVehicle({ ...newVehicle, price: Number(e.target.value) })}
+                  value={newVehicle.price || ''}
+                  onChange={(e) => setNewVehicle({ ...newVehicle, price: e.target.value })}
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                 />
               </div>
             </div>
 
-            {/* Media URLs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="imageUrl" className="block text-sm font-medium mb-1">Image URL</label>
-                <input
-                  id="imageUrl"
-                  type="url"
-                  value={newVehicle.imageUrl || ''}
-                  onChange={(e) => setNewVehicle({ ...newVehicle, imageUrl: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
-              <div>
-                <label htmlFor="youtubeUrl" className="block text-sm font-medium mb-1">YouTube URL</label>
-                <input
-                  id="youtubeUrl"
-                  type="url"
-                  value={newVehicle.youtubeUrl || ''}
-                  onChange={(e) => setNewVehicle({ ...newVehicle, youtubeUrl: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
-            </div>
-
-            {/* Vehicle Details Textarea */}
+            {/* YouTube URL */}
             <div>
-              <label htmlFor="details" className="block text-sm font-medium mb-1">Details</label>
+              <label htmlFor="youtubeUrl" className="block text-sm font-medium mb-1">YouTube URL *</label>
+              <input
+                id="youtubeUrl"
+                type="url"
+                required
+                value={newVehicle.youtubeUrl || ''}
+                onChange={(e) => setNewVehicle({ ...newVehicle, youtubeUrl: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                placeholder="https://www.youtube.com/watch?v=..."
+              />
+            </div>
+
+            {/* Details */}
+            <div>
+              <label htmlFor="details" className="block text-sm font-medium mb-1">Details *</label>
               <textarea
                 id="details"
                 required
@@ -115,119 +129,25 @@ const AddEditVehicleModal = ({
               />
             </div>
 
-            {/* Seller Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="sellerName" className="block text-sm font-medium mb-1">Seller Name</label>
-                <input
-                  id="sellerName"
-                  type="text"
-                  required
-                  value={newVehicle.seller.name}
-                  onChange={(e) => setNewVehicle({
-                    ...newVehicle,
-                    seller: { ...newVehicle.seller, name: e.target.value }
-                  })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
-              <div>
-                <label htmlFor="sellerExperience" className="block text-sm font-medium mb-1">Experience</label>
-                <input
-                  id="sellerExperience"
-                  type="text"
-                  required
-                  value={newVehicle.seller.experience}
-                  onChange={(e) => setNewVehicle({
-                    ...newVehicle,
-                    seller: { ...newVehicle.seller, experience: e.target.value }
-                  })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
-              <div>
-                <label htmlFor="sellerPhone" className="block text-sm font-medium mb-1">Phone</label>
-                <input
-                  id="sellerPhone"
-                  type="tel"
-                  required
-                  value={newVehicle.seller.phone}
-                  onChange={(e) => setNewVehicle({
-                    ...newVehicle,
-                    seller: { ...newVehicle.seller, phone: e.target.value }
-                  })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
-              <div>
-                <label htmlFor="sellerEmail" className="block text-sm font-medium mb-1">Email</label>
-                <input
-                  id="sellerEmail"
-                  type="email"
-                  required
-                  value={newVehicle.seller.email}
-                  onChange={(e) => setNewVehicle({
-                    ...newVehicle,
-                    seller: { ...newVehicle.seller, email: e.target.value }
-                  })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
+            <div className="flex justify-end space-x-3 pt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowAddVehicle(false);
+                  setEditingVehicle(null);
+                  setNewVehicle(emptyVehicle);
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
+              >
+                {editingVehicle ? 'Update Vehicle' : 'Add Vehicle'}
+              </button>
             </div>
-
-            {/* Location */}
-            <div>
-              <label htmlFor="sellerLocation" className="block text-sm font-medium mb-1">Location</label>
-              <input
-                id="sellerLocation"
-                type="text"
-                required
-                value={newVehicle.seller.location}
-                onChange={(e) => setNewVehicle({
-                  ...newVehicle,
-                  seller: { ...newVehicle.seller, location: e.target.value }
-                })}
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-              />
-            </div>
-
-            {/* Seller Description */}
-            <div>
-              <label htmlFor="sellerDescription" className="block text-sm font-medium mb-1">Seller Description</label>
-              <textarea
-                id="sellerDescription"
-                required
-                rows={3}
-                value={newVehicle.seller.description}
-                onChange={(e) => setNewVehicle({
-                  ...newVehicle,
-                  seller: { ...newVehicle.seller, description: e.target.value }
-                })}
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-              />
-            </div>
-
-            {/* New Arrival Checkbox */}
-            <div className="flex items-center">
-              <input
-                id="isNew"
-                type="checkbox"
-                checked={newVehicle.isNew}
-                onChange={(e) => setNewVehicle({ ...newVehicle, isNew: e.target.checked })}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label htmlFor="isNew" className="ml-2 block text-sm">
-                Mark as New Arrival
-              </label>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg mt-6"
-            >
-              {editingVehicle ? 'Save Changes' : 'Add Vehicle'}
-            </button>
           </form>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { X, Calendar } from 'lucide-react';
 
 interface VehicleDetailsModalProps {
   darkMode: boolean;
-  selectedVehicle: Vehicle | null;
+  selectedVehicle: Vehicle;
   showBooking: boolean;
   isAuthenticated: boolean;
   setEditingVehicle: (vehicle: Vehicle | null) => void;
@@ -11,7 +11,7 @@ interface VehicleDetailsModalProps {
   setSelectedVehicle: (vehicle: Vehicle | null) => void;
   setShowBooking: (show: boolean) => void;
   setShowAddVehicle: (show: boolean) => void;
-  deleteVehicle: (id: number) => void;
+  deleteVehicle: (id: string) => Promise<void>;
   setVehicles?: (vehicles: Vehicle[]) => void;
   getVehicles?: () => Promise<Vehicle[]> | Vehicle[];
 }
@@ -30,8 +30,9 @@ const VehicleDetailsModal = ({
   setVehicles,
   getVehicles
 }: VehicleDetailsModalProps) => {
-  const calculateDiscountedPrice = (price: number) => {
-    return (price * 0.8).toFixed(2); // 20% off
+  const calculateDiscountedPrice = (price: string) => {
+    const numericPrice = parseFloat(price);
+    return (numericPrice * 0.8).toFixed(2); // 20% off
   };
 
   const formatYouTubeUrl = (url: string): string => {
@@ -114,10 +115,8 @@ const VehicleDetailsModal = ({
               )}
               <div className="mt-4">
                 <h4 className="font-semibold text-lg mb-2">Pricing</h4>
-                <p className="text-gray-500 dark:text-gray-400 line-through">                  Original Price: ₹{selectedVehicle.price.toLocaleString('en-IN')}
-                </p>
-                <p className="text-2xl font-bold text-green-600">
-                  Special Offer: ₹{calculateDiscountedPrice(selectedVehicle.price).toLocaleString('en-IN')}
+                <p className="text-2xl font-bold text-blue-600">
+                  Price: {formatPrice(selectedVehicle.price)}
                 </p>
               </div>
 
@@ -144,28 +143,14 @@ const VehicleDetailsModal = ({
                 <p className="text-gray-600 dark:text-gray-400">{selectedVehicle.details}</p>
               </div>
 
-              {selectedVehicle.specifications && (
-                <div>
-                  <h4 className="font-semibold text-lg mb-2">Specifications</h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    {Object.entries(selectedVehicle.specifications).map(([key, value]) => (
-                      <div key={key} className="flex flex-col">
-                        <span className="text-sm text-gray-500 dark:text-gray-400">{key}</span>
-                        <span className="font-medium">{value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <div>
+                <h4 className="font-semibold text-lg mb-2">Vehicle ID</h4>
+                <p className="text-gray-600 dark:text-gray-400">{selectedVehicle.vehicleId || 'N/A'}</p>
+              </div>
 
               <div>
-                <h4 className="font-semibold text-lg mb-2">Seller Information</h4>
-                <div className="space-y-2">
-                  <p><span className="font-medium">Name:</span> {selectedVehicle.seller.name}</p>
-                  <p><span className="font-medium">Experience:</span> {selectedVehicle.seller.experience}</p>
-                  <p><span className="font-medium">Location:</span> {selectedVehicle.seller.location}</p>
-                  <p className="text-gray-600 dark:text-gray-400">{selectedVehicle.seller.description}</p>
-                </div>
+                <h4 className="font-semibold text-lg mb-2">Description</h4>
+                <p className="text-gray-600 dark:text-gray-400">{selectedVehicle.details || 'No additional details available.'}</p>
               </div>
 
               <button

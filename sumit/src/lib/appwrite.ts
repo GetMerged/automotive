@@ -15,7 +15,6 @@ export interface VehicleDocument extends Models.Document {
   vehicleId: number;
   vehicleName: string;
   price: number;
-  isNew: boolean;
   imageUrl?: string;
   youtubeUrl?: string;
   details: string;
