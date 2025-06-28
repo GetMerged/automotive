@@ -30,14 +30,14 @@ export const getVehicles = async (): Promise<Vehicle[]> => {
 // Add a new vehicle to Appwrite
 export const addVehicle = async (vehicleData: Omit<Vehicle, 'id'>): Promise<Vehicle> => {
   try {
-    // Parse the price string to a number, removing any non-numeric characters except decimal point
-    const priceValue = parseFloat(vehicleData.price.replace(/[^0-9.-]+/g, '')) || 0;
+    // Clean the price string, but keep it as a string for Appwrite
+    const priceValue = vehicleData.price.replace(/[^0-9.-]+/g, '');
     
     // Create a properly formatted vehicle data object that matches the Appwrite schema
     const vehiclePayload = {
       vehicleId: vehicleData.vehicleId,
       vehicleName: vehicleData.name,
-      price: priceValue, // Send as number
+      price: priceValue, // Send as string
       youtubeUrl: vehicleData.youtubeUrl || '',
       details: vehicleData.details
     };
@@ -51,7 +51,7 @@ export const addVehicle = async (vehicleData: Omit<Vehicle, 'id'>): Promise<Vehi
       id: response.$id,
       vehicleId: response.vehicleId,
       name: response.vehicleName,
-      price: response.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+      price: String(response.price),
       youtubeUrl: response.youtubeUrl || '',
       details: response.details
     };
@@ -64,13 +64,13 @@ export const addVehicle = async (vehicleData: Omit<Vehicle, 'id'>): Promise<Vehi
 // Update an existing vehicle in Appwrite
 export const updateVehicle = async (vehicle: Vehicle): Promise<Vehicle> => {
   try {
-    // Parse the price string to a number, removing any non-numeric characters except decimal point
-    const priceValue = parseFloat(vehicle.price.replace(/[^0-9.-]+/g, '')) || 0;
+    // Clean the price string, but keep it as a string for Appwrite
+    const priceValue = vehicle.price.replace(/[^0-9.-]+/g, '');
     
     // Create update payload with correct field names for Appwrite
     const updatePayload = {
       vehicleName: vehicle.name,
-      price: priceValue, // Send as number
+      price: priceValue, // Send as string
       youtubeUrl: vehicle.youtubeUrl || '',
       details: vehicle.details
     };
@@ -84,7 +84,7 @@ export const updateVehicle = async (vehicle: Vehicle): Promise<Vehicle> => {
       id: response.$id,
       vehicleId: response.vehicleId,
       name: response.vehicleName,
-      price: response.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+      price: String(response.price),
       youtubeUrl: response.youtubeUrl || '',
       details: response.details
     };

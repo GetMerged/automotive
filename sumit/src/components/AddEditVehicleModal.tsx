@@ -96,7 +96,7 @@ const AddEditVehicleModal = ({
                   type="text"
                   required
                   value={newVehicle.price || ''}
-                  onChange={(e) => setNewVehicle({ ...newVehicle, price: e.target.value })}
+                  onChange={(e) => setNewVehicle({ ...newVehicle, price: e.target.value.toString() })}
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                 />
               </div>
