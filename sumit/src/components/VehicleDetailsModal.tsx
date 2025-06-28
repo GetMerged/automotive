@@ -1,34 +1,32 @@
 import { Vehicle } from '../types/Vehicle';
-import { X, Calendar } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface VehicleDetailsModalProps {
   darkMode: boolean;
   selectedVehicle: Vehicle;
-  showBooking: boolean;
   isAuthenticated: boolean;
   setEditingVehicle: (vehicle: Vehicle | null) => void;
   setNewVehicle: (vehicle: Omit<Vehicle, 'id'>) => void;
   setSelectedVehicle: (vehicle: Vehicle | null) => void;
-  setShowBooking: (show: boolean) => void;
   setShowAddVehicle: (show: boolean) => void;
   deleteVehicle: (id: string) => Promise<void>;
   setVehicles?: (vehicles: Vehicle[]) => void;
   getVehicles?: () => Promise<Vehicle[]> | Vehicle[];
+  setShowContactInfo: (show: boolean) => void;
 }
 
 const VehicleDetailsModal = ({
   darkMode,
   selectedVehicle,
-  showBooking,
   isAuthenticated,
   setEditingVehicle,
   setNewVehicle,
   setSelectedVehicle,
-  setShowBooking,
   setShowAddVehicle,
   deleteVehicle,
   setVehicles,
-  getVehicles
+  getVehicles,
+  setShowContactInfo
 }: VehicleDetailsModalProps) => {
   const formatYouTubeUrl = (url: string): string => {
     if (!url) return '';
@@ -53,7 +51,7 @@ const VehicleDetailsModal = ({
     return `$${numericPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
-  if (!selectedVehicle || showBooking) return null;
+  if (!selectedVehicle) return null;
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -180,11 +178,12 @@ const VehicleDetailsModal = ({
                 </div>
 
                 <button
-                  onClick={() => setShowBooking(true)}
+                  onClick={() => {
+                    setShowContactInfo(true);
+                  }}
                   className="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 hover:from-blue-600 hover:via-purple-600 hover:to-green-600 text-white px-8 py-4 rounded-xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 flex items-center justify-center space-x-3 text-lg"
                 >
-                  <Calendar className="h-6 w-6" />
-                  <span>Schedule Viewing</span>
+                  <span>Contact Info</span>
                 </button>
               </div>
             </div>

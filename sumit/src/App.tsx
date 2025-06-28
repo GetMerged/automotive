@@ -7,7 +7,6 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import VehicleCard from './components/VehicleCard';
 import AddEditVehicleModal from './components/AddEditVehicleModal';
-import BookingModal from './components/BookingModal';
 import VehicleDetailsModal from './components/VehicleDetailsModal';
 import ContactInfoModal from './components/ContactInfoModal';
 
@@ -15,12 +14,6 @@ function AppContent() {
   const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
-  const [showBooking, setShowBooking] = useState(false);
-  const [bookingDate, setBookingDate] = useState('');
-  const [bookingTime, setBookingTime] = useState('');
-  const [bookingName, setBookingName] = useState('');
-  const [bookingEmail, setBookingEmail] = useState('');
-  const [bookingPhone, setBookingPhone] = useState('');
   const [showContactInfo, setShowContactInfo] = useState(false);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,18 +67,6 @@ function AppContent() {
   }, []);
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
-
-  const handleBooking = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert(`Booking requested for ${selectedVehicle?.name}!\nDate: ${bookingDate}\nTime: ${bookingTime}`);
-    setShowBooking(false);
-    setSelectedVehicle(null);
-    setBookingDate('');
-    setBookingTime('');
-    setBookingName('');
-    setBookingEmail('');
-    setBookingPhone('');
-  };
 
   const handleAddEditVehicle = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,7 +140,7 @@ function AppContent() {
               darkMode={darkMode}
               onViewDetails={(vehicle) => {
                 setSelectedVehicle(vehicle);
-                setShowBooking(false);
+                setShowContactInfo(false);
               }}
             />
           ))}
@@ -182,37 +163,18 @@ function AppContent() {
           <VehicleDetailsModal
             darkMode={darkMode}
             selectedVehicle={selectedVehicle}
-            showBooking={showBooking}
+            showBooking={false} // Booking removed
             isAuthenticated={isAuthenticated}
             setEditingVehicle={setEditingVehicle}
             setNewVehicle={setNewVehicle}
             setSelectedVehicle={setSelectedVehicle}
-            setShowBooking={setShowBooking}
             setShowAddVehicle={setShowAddVehicle}
             deleteVehicle={deleteVehicle}
             setVehicles={setVehicles}
             getVehicles={getVehicles}
+            setShowContactInfo={setShowContactInfo}
           />
         )}
-
-        <BookingModal
-          darkMode={darkMode}
-          selectedVehicle={selectedVehicle!}
-          showBooking={showBooking}
-          bookingDate={bookingDate}
-          bookingTime={bookingTime}
-          bookingName={bookingName}
-          bookingEmail={bookingEmail}
-          bookingPhone={bookingPhone}
-          setSelectedVehicle={setSelectedVehicle}
-          setShowBooking={setShowBooking}
-          setBookingDate={setBookingDate}
-          setBookingTime={setBookingTime}
-          setBookingName={setBookingName}
-          setBookingEmail={setBookingEmail}
-          setBookingPhone={setBookingPhone}
-          handleBooking={handleBooking}
-        />
 
         <ContactInfoModal
           darkMode={darkMode}
