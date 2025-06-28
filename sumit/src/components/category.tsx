@@ -14,11 +14,11 @@ export const getVehicles = async (): Promise<Vehicle[]> => {
   try {
     const response = await vehicleService.listVehicles();
     return response.documents.map(doc => ({
-      id: doc.id,
+      id: doc.$id, // 
       vehicleId: doc.vehicleId,
-      name: doc.name,
-      price: doc.price,
-      youtubeUrl: doc.youtubeUrl,
+      name: doc.vehicleName, // 
+      price: String(doc.price),
+      youtubeUrl: doc.youtubeUrl || '',
       details: doc.details
     }));
   } catch (error) {
