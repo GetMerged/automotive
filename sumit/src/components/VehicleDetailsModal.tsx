@@ -162,9 +162,9 @@ const VehicleDetailsModal = ({
                 </div>
 
                 <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-700/50 border-gray-600' : 'bg-green-50/80 border-green-200'} border transform hover:scale-105 transition-all duration-200`}>
-                  <h5 className={`font-semibold text-lg mb-3 ${darkMode ? 'text-green-300' : 'text-green-700'}`}>Vehicle ID</h5>
+                  <h5 className={`font-semibold text-lg mb-3 ${darkMode ? 'text-green-300' : 'text-green-700'}`}>Vehicle Number</h5>
                   <p className={`${darkMode ? 'text-gray-300' : 'text-gray-700'} text-base font-mono px-3 py-2 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-                    {selectedVehicle.vehicleId || 'N/A'}
+                    {selectedVehicle.VehicleId || 'N/A'}
                   </p>
                 </div>
               </div>

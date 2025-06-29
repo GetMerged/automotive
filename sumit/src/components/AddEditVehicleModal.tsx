@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Vehicle } from '../types/Vehicle';
-import { X } from 'lucide-react';
+import { X, Car, Hash, DollarSign, Youtube, FileText, Save, Plus } from 'lucide-react';
 
 interface AddEditVehicleModalProps {
   darkMode: boolean;
@@ -32,125 +32,276 @@ const AddEditVehicleModal = ({
     await handleAddEditVehicle(e);
   };
 
+  const handleCancel = () => {
+    setShowAddVehicle(false);
+    setEditingVehicle(null);
+    setNewVehicle(emptyVehicle);
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-      <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto`}>
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-          <h3 className="text-xl font-semibold">{editingVehicle ? 'Edit Vehicle' : 'Add New Vehicle'}</h3>
-          <button 
-            onClick={() => {
-              setShowAddVehicle(false);
-              setEditingVehicle(null);
-              setNewVehicle(emptyVehicle);
-            }}
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            aria-label="Close modal"
-          >
-            <X className="h-6 w-6" />
-          </button>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className={`${
+        darkMode 
+          ? 'bg-gray-900/95 border-gray-800/50' 
+          : 'bg-white/95 border-gray-200/50'
+        } backdrop-blur-xl rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-hidden shadow-2xl border transform animate-slide-up`}>
+        
+        {/* Header */}
+        <div className="relative overflow-hidden">
+          <div className={`absolute inset-0 ${
+            darkMode ? 'bg-gradient-to-r from-blue-600/10 to-purple-600/10' : 'bg-gradient-to-r from-blue-500/5 to-purple-500/5'
+          }`}></div>
+          
+          <div className="relative p-8 pb-6">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center space-x-4">
+                <div className={`p-3 rounded-2xl ${
+                  darkMode ? 'bg-blue-600/20 text-blue-400' : 'bg-blue-500/10 text-blue-600'
+                }`}>
+                  {editingVehicle ? <Save className="h-6 w-6" /> : <Plus className="h-6 w-6" />}
+                </div>
+                <div>
+                  <h1 className={`text-3xl font-light tracking-tight ${
+                    darkMode ? 'text-white' : 'text-gray-900'
+                  }`}>
+                    {editingVehicle ? 'Edit Vehicle' : 'Add New Vehicle'}
+                  </h1>
+                  <p className={`text-sm mt-1 ${
+                    darkMode ? 'text-gray-400' : 'text-gray-600'
+                  }`}>
+                    {editingVehicle ? 'Update vehicle information' : 'Enter vehicle details below'}
+                  </p>
+                </div>
+              </div>
+              
+              <button 
+                onClick={handleCancel}
+                className={`p-3 rounded-2xl transition-all duration-200 hover:scale-105 hover:rotate-90 ${
+                  darkMode 
+                    ? 'bg-gray-800/60 hover:bg-gray-700/80 text-gray-300 hover:text-white' 
+                    : 'bg-gray-100/60 hover:bg-gray-200/80 text-gray-600 hover:text-gray-900'
+                }`}
+                aria-label="Close modal"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+          </div>
         </div>
         
-        <div className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Vehicle ID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="id" className="block text-sm font-medium mb-1">ID (Auto-generated)</label>
+        {/* Form Content */}
+        <div className="px-8 pb-8 overflow-y-auto max-h-[calc(95vh-180px)]">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            
+            {/* ID Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className={`p-6 rounded-2xl ${
+                darkMode 
+                  ? 'bg-gray-800/30 border-gray-700/50' 
+                  : 'bg-gray-50/50 border-gray-200/50'
+              } border backdrop-blur-sm`}>
+                <div className="flex items-center mb-4">
+                  <Hash className={`h-5 w-5 mr-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                  <label className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    System ID (Auto-generated)
+                  </label>
+                </div>
                 <input
-                  id="id"
                   type="text"
-                  value={newVehicle.id || ''}
+                  value={newVehicle.id || 'Auto-generated on save'}
                   readOnly
-                  className="w-full px-3 py-2 border rounded-lg bg-gray-100 dark:bg-gray-600 cursor-not-allowed"
+                  className={`w-full px-4 py-3 rounded-xl font-mono text-sm transition-all duration-200 ${
+                    darkMode 
+                      ? 'bg-gray-800/50 border-gray-700/50 text-gray-400' 
+                      : 'bg-gray-100/50 border-gray-200/50 text-gray-500'
+                  } border cursor-not-allowed`}
                 />
               </div>
-              <div>
-                <label htmlFor="vehicleId" className="block text-sm font-medium mb-1">Vehicle ID</label>
+
+              <div className={`p-6 rounded-2xl ${
+                darkMode 
+                  ? 'bg-gray-800/30 border-gray-700/50' 
+                  : 'bg-gray-50/50 border-gray-200/50'
+              } border backdrop-blur-sm`}>
+                <div className="flex items-center mb-4">
+                  <Car className={`h-5 w-5 mr-3 ${darkMode ? 'text-purple-400' : 'text-purple-600'}`} />
+                  <label className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Vehicle Number
+                  </label>
+                </div>
                 <input
-                  id="vehicleId"
-                  type="number"
-                  value={newVehicle.vehicleId || ''}
-                  onChange={(e) => setNewVehicle({ ...newVehicle, vehicleId: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                  type="text"
+                  placeholder="e.g. UP 65 CH 5100"
+                  value={newVehicle.VehicleId || ''}
+                  onChange={(e) => setNewVehicle({ ...newVehicle, VehicleId: e.target.value })}
+                  className={`w-full px-4 py-3 rounded-xl font-mono transition-all duration-200 focus:scale-[1.02] ${
+                    darkMode 
+                      ? 'bg-gray-900/50 border-gray-700/50 text-white focus:border-purple-500/50 focus:bg-gray-900/80' 
+                      : 'bg-white/80 border-gray-200/50 text-gray-900 focus:border-purple-500/50 focus:bg-white'
+                  } border focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
                 />
               </div>
             </div>
 
-            {/* Vehicle Details */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-1">Vehicle Name *</label>
+            {/* Basic Details */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className={`p-6 rounded-2xl ${
+                darkMode 
+                  ? 'bg-gray-800/30 border-gray-700/50' 
+                  : 'bg-gray-50/50 border-gray-200/50'
+              } border backdrop-blur-sm`}>
+                <div className="flex items-center mb-4">
+                  <Car className={`h-5 w-5 mr-3 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+                  <label className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Vehicle Name *
+                  </label>
+                </div>
                 <input
-                  id="name"
                   type="text"
                   required
+                  placeholder="e.g. Maruti Suzuki Swift"
                   value={newVehicle.name || ''}
                   onChange={(e) => setNewVehicle({ ...newVehicle, name: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                  className={`w-full px-4 py-3 rounded-xl transition-all duration-200 focus:scale-[1.02] ${
+                    darkMode 
+                      ? 'bg-gray-900/50 border-gray-700/50 text-white focus:border-blue-500/50 focus:bg-gray-900/80' 
+                      : 'bg-white/80 border-gray-200/50 text-gray-900 focus:border-blue-500/50 focus:bg-white'
+                  } border focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
                 />
               </div>
-              <div>
-                <label htmlFor="price" className="block text-sm font-medium mb-1">Price *</label>
+
+              <div className={`p-6 rounded-2xl ${
+                darkMode 
+                  ? 'bg-gray-800/30 border-gray-700/50' 
+                  : 'bg-gray-50/50 border-gray-200/50'
+              } border backdrop-blur-sm`}>
+                <div className="flex items-center mb-4">
+                  <DollarSign className={`h-5 w-5 mr-3 ${darkMode ? 'text-green-400' : 'text-green-600'}`} />
+                  <label className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Price (₹) *
+                  </label>
+                </div>
                 <input
-                  id="price"
                   type="text"
                   required
+                  placeholder="e.g. 550000"
                   value={newVehicle.price || ''}
                   onChange={(e) => setNewVehicle({ ...newVehicle, price: e.target.value.toString() })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                  className={`w-full px-4 py-3 rounded-xl transition-all duration-200 focus:scale-[1.02] ${
+                    darkMode 
+                      ? 'bg-gray-900/50 border-gray-700/50 text-white focus:border-green-500/50 focus:bg-gray-900/80' 
+                      : 'bg-white/80 border-gray-200/50 text-gray-900 focus:border-green-500/50 focus:bg-white'
+                  } border focus:outline-none focus:ring-2 focus:ring-green-500/20`}
                 />
               </div>
             </div>
 
             {/* YouTube URL */}
-            <div>
-              <label htmlFor="youtubeUrl" className="block text-sm font-medium mb-1">YouTube URL *</label>
+            <div className={`p-6 rounded-2xl ${
+              darkMode 
+                ? 'bg-gray-800/30 border-gray-700/50' 
+                : 'bg-gray-50/50 border-gray-200/50'
+            } border backdrop-blur-sm`}>
+              <div className="flex items-center mb-4">
+                <Youtube className={`h-5 w-5 mr-3 ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
+                <label className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  YouTube Video URL *
+                </label>
+              </div>
               <input
-                id="youtubeUrl"
                 type="url"
                 required
+                placeholder="https://www.youtube.com/watch?v=..."
                 value={newVehicle.youtubeUrl || ''}
                 onChange={(e) => setNewVehicle({ ...newVehicle, youtubeUrl: e.target.value })}
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                placeholder="https://www.youtube.com/watch?v=..."
+                className={`w-full px-4 py-3 rounded-xl transition-all duration-200 focus:scale-[1.02] ${
+                  darkMode 
+                    ? 'bg-gray-900/50 border-gray-700/50 text-white focus:border-red-500/50 focus:bg-gray-900/80' 
+                    : 'bg-white/80 border-gray-200/50 text-gray-900 focus:border-red-500/50 focus:bg-white'
+                } border focus:outline-none focus:ring-2 focus:ring-red-500/20`}
               />
             </div>
 
             {/* Details */}
-            <div>
-              <label htmlFor="details" className="block text-sm font-medium mb-1">Details *</label>
+            <div className={`p-6 rounded-2xl ${
+              darkMode 
+                ? 'bg-gray-800/30 border-gray-700/50' 
+                : 'bg-gray-50/50 border-gray-200/50'
+            } border backdrop-blur-sm`}>
+              <div className="flex items-center mb-4">
+                <FileText className={`h-5 w-5 mr-3 ${darkMode ? 'text-orange-400' : 'text-orange-600'}`} />
+                <label className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Vehicle Details *
+                </label>
+              </div>
               <textarea
-                id="details"
                 required
-                rows={4}
+                rows={5}
+                placeholder="Describe the vehicle's condition, features, mileage, year, etc..."
                 value={newVehicle.details}
                 onChange={(e) => setNewVehicle({ ...newVehicle, details: e.target.value })}
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                className={`w-full px-4 py-3 rounded-xl resize-none transition-all duration-200 focus:scale-[1.02] ${
+                  darkMode 
+                    ? 'bg-gray-900/50 border-gray-700/50 text-white focus:border-orange-500/50 focus:bg-gray-900/80' 
+                    : 'bg-white/80 border-gray-200/50 text-gray-900 focus:border-orange-500/50 focus:bg-white'
+                } border focus:outline-none focus:ring-2 focus:ring-orange-500/20`}
               />
             </div>
 
-            <div className="flex justify-end space-x-3 pt-4">
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-6">
               <button
                 type="button"
-                onClick={() => {
-                  setShowAddVehicle(false);
-                  setEditingVehicle(null);
-                  setNewVehicle(emptyVehicle);
-                }}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
+                onClick={handleCancel}
+                className={`px-8 py-4 rounded-2xl font-medium transition-all duration-200 hover:scale-105 ${
+                  darkMode 
+                    ? 'bg-gray-800/60 hover:bg-gray-700/80 text-gray-300 hover:text-white border border-gray-700/50' 
+                    : 'bg-gray-100/60 hover:bg-gray-200/80 text-gray-600 hover:text-gray-900 border border-gray-200/50'
+                }`}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
+                className={`px-8 py-4 rounded-2xl font-medium text-white transition-all duration-200 hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-2 ${
+                  editingVehicle
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
+                    : 'bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600'
+                }`}
               >
-                {editingVehicle ? 'Update Vehicle' : 'Add Vehicle'}
+                {editingVehicle ? <Save className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+                <span>{editingVehicle ? 'Update Vehicle' : 'Add Vehicle'}</span>
               </button>
             </div>
           </form>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        @keyframes slide-up {
+          from { 
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+          }
+          to { 
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        
+        .animate-fade-in {
+          animation: fade-in 0.2s ease-out;
+        }
+        
+        .animate-slide-up {
+          animation: slide-up 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };

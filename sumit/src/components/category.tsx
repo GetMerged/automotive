@@ -2,7 +2,7 @@ import { vehicleService } from '../lib/appwrite';
 
 export interface Vehicle {
   id: string;
-  vehicleId: number;
+  VehicleId: string; // Capital V for VehicleId
   name: string;
   price: string;
   youtubeUrl: string;
@@ -15,7 +15,7 @@ export const getVehicles = async (): Promise<Vehicle[]> => {
     const response = await vehicleService.listVehicles();
     return response.documents.map(doc => ({
       id: doc.$id, // 
-      vehicleId: doc.vehicleId,
+      VehicleId: String(doc.VehicleId), // Ensure VehicleId is string
       name: doc.vehicleName, // 
       price: String(doc.price),
       youtubeUrl: doc.youtubeUrl || '',
@@ -35,7 +35,7 @@ export const addVehicle = async (vehicleData: Omit<Vehicle, 'id'>): Promise<Vehi
     
     // Create a properly formatted vehicle data object that matches the Appwrite schema
     const vehiclePayload = {
-      vehicleId: vehicleData.vehicleId,
+      VehicleId: vehicleData.VehicleId, // Capital V to match Appwrite schema
       vehicleName: vehicleData.name,
       price: priceValue, // Send as string
       youtubeUrl: vehicleData.youtubeUrl || '',
@@ -49,7 +49,7 @@ export const addVehicle = async (vehicleData: Omit<Vehicle, 'id'>): Promise<Vehi
     // Format the price for display in the UI
     return {
       id: response.$id,
-      vehicleId: response.vehicleId,
+      VehicleId: String(response.VehicleId), // Ensure VehicleId is string
       name: response.vehicleName,
       price: String(response.price),
       youtubeUrl: response.youtubeUrl || '',
@@ -82,7 +82,7 @@ export const updateVehicle = async (vehicle: Vehicle): Promise<Vehicle> => {
     // Format the price for display in the UI
     return {
       id: response.$id,
-      vehicleId: response.vehicleId,
+      VehicleId: String(response.VehicleId), // Ensure VehicleId is string
       name: response.vehicleName,
       price: String(response.price),
       youtubeUrl: response.youtubeUrl || '',

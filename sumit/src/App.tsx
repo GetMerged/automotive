@@ -127,7 +127,7 @@ function AppContent() {
       <main className="container mx-auto px-4 pt-24 pb-12">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">Welcome to AutoMotive</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Welcome to MotoHub</h1>
           <p className="text-xl text-gray-600 dark:text-gray-400">Discover Your Perfect Ride</p>
         </div>
 

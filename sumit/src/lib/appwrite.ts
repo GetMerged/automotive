@@ -12,7 +12,7 @@ export const COLLECTION_ID = '68333dd40002e1582d2f';
 export const DATABASE_ID = '68333dc60031ad5e41f6';
 
 export interface VehicleDocument extends Models.Document {
-  vehicleId: number;
+  VehicleId: string; // Capital V and string type
   vehicleName: string;
   price: number;
   imageUrl?: string;
@@ -57,18 +57,18 @@ export const vehicleService = {
     }
   },
 
-  // Get a vehicle by vehicleId (not document ID)
-  async getVehicleByVehicleId(vehicleId: number): Promise<VehicleDocument | null> {
+  // Get a vehicle by VehicleId (not document ID)
+  async getVehicleByVehicleId(VehicleId: string): Promise<VehicleDocument | null> {
     try {
       const response = await databases.listDocuments<VehicleDocument>(
         DATABASE_ID,
         COLLECTION_ID,
-        [Query.equal('vehicleId', vehicleId)]
+        [Query.equal('VehicleId', VehicleId)]
       );
       
       return response.documents[0] || null;
     } catch (error) {
-      console.error('Error getting vehicle by ID:', error);
+      console.error('Error getting vehicle by VehicleId:', error);
       throw error;
     }
   },
@@ -76,7 +76,7 @@ export const vehicleService = {
   // Update a vehicle
   async updateVehicle(
     documentId: string,
-    updates: Partial<Omit<VehicleDocument, keyof Models.Document | 'vehicleId'>>
+    updates: Partial<Omit<VehicleDocument, keyof Models.Document | 'VehicleId'>>
   ): Promise<VehicleDocument> {
     try {
       return await databases.updateDocument<VehicleDocument>(

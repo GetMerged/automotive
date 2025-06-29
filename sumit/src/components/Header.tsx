@@ -33,7 +33,7 @@ const Header = ({
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-4">
             <Car className="h-8 w-8" />
-            <span className="font-bold text-xl">AutoMotive</span>
+            <span className="font-bold text-xl">MotoHub</span>
           </div>
           <div className="hidden md:flex items-center space-x-4">
             <button

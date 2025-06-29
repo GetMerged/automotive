@@ -1,6 +1,6 @@
 export interface Vehicle {
   id: string;
-  vehicleId?: number;
+  VehicleId?: string; // Capital V for VehicleId
   name: string;
   price: string;
   youtubeUrl: string;
