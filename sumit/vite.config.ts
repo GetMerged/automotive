@@ -7,16 +7,16 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     host: true,
-    port: 3000,
+    port: 5173,
     strictPort: true,
     allowedHosts: [
       'concentrate-guatemala-outlet-assessed.trycloudflare.com',
       'web.themotohub.shop',
-      'cloud.appwrite.io', // Add Appwrite cloud endpoint
+      'https://fra.cloud.appwrite.io/v1',
       'localhost'
     ],
     cors: {
-      origin: ['https://cloud.appwrite.io'], // Allow Appwrite cloud endpoint
+      origin: ['https://fra.cloud.appwrite.io/v1'], 
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       credentials: true
     }
